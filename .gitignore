@@ -1,0 +1,30 @@
+# RightClickPasteKing — .gitignore
+#
+# The Xcode project is GENERATED from project.yml by ./regenerate.sh.
+# It is disposable and must not be committed — project.yml is the source
+# of truth. Anyone with the repo runs ./regenerate.sh to produce it.
+
+# Generated Xcode project
+*.xcodeproj/
+
+# Temp spec written by regenerate.sh (version-injected copy of project.yml)
+.project.generated.yml
+
+# Xcode per-user state, build output, derived data
+*.xcworkspace/xcuserdata/
+xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
+
+# XcodeGen / build intermediates
+*.moved-aside
+
+# Notarization / distribution output
+dist/
+
+# macOS filesystem cruft
+.DS_Store
+
+# Appcast generation staging (release.sh)
+.appcast-staging/

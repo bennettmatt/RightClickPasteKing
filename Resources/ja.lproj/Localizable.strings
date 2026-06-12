@@ -1,0 +1,38 @@
+/* RightClickPasteKing — 日本語 */
+
+"menu.enabled" = "有効";
+"menu.clearAfterPaste" = "ペースト後にクリップボードを消去";
+"menu.clearAfterPaste.tooltip" = "右クリックでペーストした後、システムのクリップボードを空にします。ターミナルだけでなく、すべてのアプリに影響します。";
+"menu.tintIcon" = "クリップボードにテキストがあるときアイコンを紫色に";
+"menu.accessibility.checking" = "アクセシビリティ: 確認中…";
+"menu.accessibility.granted" = "アクセシビリティ: 許可済み";
+"menu.accessibility.required" = "アクセシビリティ: 未許可 — 必須です";
+"menu.accessibility.notGranted" = "アクセシビリティ: 未許可";
+"menu.openAccessibility" = "アクセシビリティ設定を開く…";
+"menu.setupGuide" = "設定ガイド…";
+"menu.launchAtLogin" = "ログイン時に開く";
+"menu.quit" = "終了";
+"menu.recentCopies" = "最近のコピー";
+"menu.recentCopies.empty" = "最近のコピーはありません";
+"menu.recentCopies.clear" = "履歴を消去";
+"menu.checkForUpdates" = "アップデートを確認…";
+
+"tooltip.active" = "RightClickPasteKing — 動作中";
+"tooltip.needsPermission" = "RightClickPasteKing — アクセシビリティの許可が必要です";
+"tooltip.disabled" = "RightClickPasteKing — 無効";
+
+"alert.loginItemError" = "「ログイン時に開く」を変更できませんでした: %@";
+
+"guide.explain.title.welcome" = "RightClickPasteKing へようこそ";
+"guide.explain.title.reference" = "RightClickPasteKing";
+"guide.explain.body" = "Apple のターミナルで、右クリックが Windows/Linux と同じように動作します:\n\n•  テキストを選択中 → 右クリックでコピー\n•  何も選択していない → 右クリックでクリップボードをペースト\n•  クリップボードが空 → ターミナルの通常メニューを表示\n\n動作するのはターミナル内だけです。それ以外の場所のクリックには一切干渉しません。";
+"guide.explain.secondary" = "知っておくべき2つのデフォルト設定 — どちらもメニューバーのアイコンからいつでもオフにできます:\nペーストのたびにクリップボードが消去されます（一度ペーストすると消費されます）。また、アプリはログイン時に自動で開きます。";
+"guide.button.continue" = "続ける";
+"guide.button.done" = "完了";
+"guide.permission.title" = "許可が1つ必要です";
+"guide.permission.body" = "RightClickPasteKing の動作にはアクセシビリティの許可が必要です。これにより、ターミナルでの右クリックを検知してコピーやペーストを行えるようになります。";
+"guide.permission.secondary" = "下のボタンでアクセシビリティ設定を開き、リストの RightClickPasteKing をオンにするか、このアイコンをリストにドラッグしてください。";
+"guide.permission.button" = "アクセシビリティ設定を開く";
+"guide.permission.waiting" = "許可を待っています…";
+"guide.success.title" = "準備完了";
+"guide.success.body" = "RightClickPasteKing が動作中です。\n\n試してみましょう: どこかでテキストをコピーして、ターミナルで右クリック — ペーストされます。ターミナルでテキストを選択して右クリック — コピーされます。";

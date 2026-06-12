@@ -1,0 +1,38 @@
+/* RightClickPasteKing — Deutsch */
+
+"menu.enabled" = "Aktiviert";
+"menu.clearAfterPaste" = "Zwischenablage nach dem Einsetzen leeren";
+"menu.clearAfterPaste.tooltip" = "Leert nach einem Rechtsklick-Einsetzen die Zwischenablage des Systems. Das betrifft alle Apps, nicht nur das Terminal.";
+"menu.tintIcon" = "Violettes Symbol, wenn die Zwischenablage Text enthält";
+"menu.accessibility.checking" = "Bedienungshilfen: wird geprüft…";
+"menu.accessibility.granted" = "Bedienungshilfen: erteilt";
+"menu.accessibility.required" = "Bedienungshilfen: NICHT erteilt — erforderlich";
+"menu.accessibility.notGranted" = "Bedienungshilfen: nicht erteilt";
+"menu.openAccessibility" = "Bedienungshilfen-Einstellungen öffnen…";
+"menu.setupGuide" = "Einrichtungsassistent…";
+"menu.launchAtLogin" = "Bei der Anmeldung öffnen";
+"menu.quit" = "Beenden";
+"menu.recentCopies" = "Letzte Kopien";
+"menu.recentCopies.empty" = "Keine letzten Kopien";
+"menu.recentCopies.clear" = "Verlauf löschen";
+"menu.checkForUpdates" = "Nach Updates suchen…";
+
+"tooltip.active" = "RightClickPasteKing — aktiv";
+"tooltip.needsPermission" = "RightClickPasteKing — benötigt die Berechtigung „Bedienungshilfen“";
+"tooltip.disabled" = "RightClickPasteKing — deaktiviert";
+
+"alert.loginItemError" = "„Bei der Anmeldung öffnen“ konnte nicht geändert werden: %@";
+
+"guide.explain.title.welcome" = "Willkommen bei RightClickPasteKing";
+"guide.explain.title.reference" = "RightClickPasteKing";
+"guide.explain.body" = "Der Rechtsklick in Apples Terminal funktioniert wie unter Windows/Linux:\n\n•  Text ausgewählt → Rechtsklick kopiert ihn\n•  Nichts ausgewählt → Rechtsklick setzt die Zwischenablage ein\n•  Zwischenablage leer → das normale Terminal-Menü erscheint\n\nDie App greift nur im Terminal ein. Klicks an anderer Stelle bleiben unberührt.";
+"guide.explain.secondary" = "Zwei Standardeinstellungen, die Sie kennen sollten — beide lassen sich jederzeit über das Menüleisten-Symbol abschalten:\nDie Zwischenablage wird nach jedem Einsetzen geleert (einmal einsetzen, dann ist sie verbraucht), und die App öffnet sich bei der Anmeldung.";
+"guide.button.continue" = "Fortfahren";
+"guide.button.done" = "Fertig";
+"guide.permission.title" = "Eine Berechtigung wird benötigt";
+"guide.permission.body" = "RightClickPasteKing benötigt die Berechtigung „Bedienungshilfen“ — damit erkennt es Ihren Rechtsklick im Terminal und kopiert oder setzt für Sie ein.";
+"guide.permission.secondary" = "Klicken Sie unten, um die Bedienungshilfen-Einstellungen zu öffnen, und aktivieren Sie dann RightClickPasteKing in der Liste — oder ziehen Sie dieses Symbol hinein.";
+"guide.permission.button" = "Bedienungshilfen-Einstellungen öffnen";
+"guide.permission.waiting" = "Warte auf die Berechtigung…";
+"guide.success.title" = "Alles bereit";
+"guide.success.body" = "RightClickPasteKing ist aktiv.\n\nProbieren Sie es aus: Kopieren Sie irgendwo Text und rechtsklicken Sie im Terminal — er wird eingesetzt. Wählen Sie Text im Terminal aus und rechtsklicken Sie — er wird kopiert.";

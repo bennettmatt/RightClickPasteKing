@@ -1,0 +1,38 @@
+/* RightClickPasteKing — English (development language) */
+
+"menu.enabled" = "Enabled";
+"menu.clearAfterPaste" = "Clear Clipboard After Paste";
+"menu.clearAfterPaste.tooltip" = "After a right-click paste, empty the system clipboard. This affects all apps, not just Terminal.";
+"menu.tintIcon" = "Purple Icon When Clipboard Has Text";
+"menu.accessibility.checking" = "Accessibility: checking…";
+"menu.accessibility.granted" = "Accessibility: granted";
+"menu.accessibility.required" = "Accessibility: NOT granted — required";
+"menu.accessibility.notGranted" = "Accessibility: not granted";
+"menu.openAccessibility" = "Open Accessibility Settings…";
+"menu.setupGuide" = "Setup Guide…";
+"menu.launchAtLogin" = "Launch at Login";
+"menu.quit" = "Quit";
+"menu.recentCopies" = "Recent Copies";
+"menu.recentCopies.empty" = "No recent copies";
+"menu.recentCopies.clear" = "Clear History";
+"menu.checkForUpdates" = "Check for Updates…";
+
+"tooltip.active" = "RightClickPasteKing — active";
+"tooltip.needsPermission" = "RightClickPasteKing — needs Accessibility permission";
+"tooltip.disabled" = "RightClickPasteKing — disabled";
+
+"alert.loginItemError" = "Couldn't update Launch at Login: %@";
+
+"guide.explain.title.welcome" = "Welcome to RightClickPasteKing";
+"guide.explain.title.reference" = "RightClickPasteKing";
+"guide.explain.body" = "Right-click in Apple's Terminal works like Windows/Linux:\n\n•  Text selected → right-click copies it\n•  Nothing selected → right-click pastes the clipboard\n•  Clipboard empty → Terminal's normal menu appears\n\nIt only ever acts inside Terminal. Clicks anywhere else are untouched.";
+"guide.explain.secondary" = "Two defaults you should know — both can be turned off any time from the menu bar icon:\nthe clipboard is cleared after each paste (paste once, it's consumed), and the app starts at login.";
+"guide.button.continue" = "Continue";
+"guide.button.done" = "Done";
+"guide.permission.title" = "One permission needed";
+"guide.permission.body" = "To work, RightClickPasteKing needs Accessibility permission — that's what lets it see your right-click in Terminal and copy or paste for you.";
+"guide.permission.secondary" = "Click below to open Accessibility settings, then either switch on RightClickPasteKing in the list, or drag this icon into it.";
+"guide.permission.button" = "Open Accessibility Settings";
+"guide.permission.waiting" = "Waiting for permission…";
+"guide.success.title" = "You're all set";
+"guide.success.body" = "RightClickPasteKing is active.\n\nTry it: copy some text anywhere, then right-click in Terminal — it pastes. Select text in Terminal and right-click — it copies.";

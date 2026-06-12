@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+      The App Sandbox is intentionally DISABLED.
+
+      A session-level CGEventTap that observes mouse events across other
+      applications (Terminal.app) cannot operate inside the App Sandbox —
+      the sandbox forbids the cross-process event observation this app's
+      entire purpose depends on. This is the same reason tools like this
+      are distributed outside the Mac App Store and rely on the user
+      granting Accessibility permission instead.
+
+      Hardened Runtime is still enabled (see the build script's codesign
+      step) so the app can be notarized for distribution.
+    -->
+    <key>com.apple.security.app-sandbox</key>
+    <false/>
+</dict>
+</plist>

@@ -1,0 +1,135 @@
+# project.yml — RightClickPasteKing
+#
+# XcodeGen specification. This file is the source of truth for the Xcode
+# project; the generated RightClickPasteKing.xcodeproj is disposable and is
+# NOT committed (see .gitignore).
+#
+# ── Usage ───────────────────────────────────────────────────────────────
+#   brew install xcodegen          # one-time, if not already installed
+#   ./regenerate.sh                # generates RightClickPasteKing.xcodeproj
+#   open RightClickPasteKing.xcodeproj
+#
+# regenerate.sh injects the version numbers (from the VERSION file and a
+# timestamp) before calling `xcodegen generate`, so MARKETING_VERSION and
+# CURRENT_PROJECT_VERSION below are placeholders that get overwritten on
+# each regeneration. Do not edit the version values here — edit VERSION.
+#
+# ── Why XcodeGen ────────────────────────────────────────────────────────
+# A hand-maintained .xcodeproj is a fragile, auto-generated format full of
+# cross-referenced UUIDs. XcodeGen lets the project be defined in this
+# readable, diffable YAML and regenerated deterministically.
+
+name: RightClickPasteKing
+
+# Sparkle auto-update framework, pinned to the same version as the CLI
+# tools installed via `brew install --cask sparkle` (generate_keys /
+# generate_appcast) so the framework and the signing tools agree.
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    exactVersion: 2.9.3
+
+options:
+  # Bundle identifier prefix; combined with the target name by XcodeGen
+  # unless a target sets PRODUCT_BUNDLE_IDENTIFIER explicitly (we do, below).
+  bundleIdPrefix: com.mrbco
+  # Development (base) language. Localizations are the *.lproj directories
+  # under Resources/ — XcodeGen detects them and builds variant groups.
+  developmentLanguage: en
+  # Minimum deployment target for the whole project.
+  deploymentTarget:
+    macOS: "13.0"
+  # Generate the scheme so `xcodebuild -scheme RightClickPasteKing` works
+  # and the project opens ready to build.
+  createIntermediateGroups: true
+
+# ── Project-level build settings ────────────────────────────────────────
+# These apply to every target unless overridden. Version values here are
+# placeholders; regenerate.sh rewrites them from the VERSION file.
+settings:
+  base:
+    MARKETING_VERSION: "0.0.0"          # overwritten by regenerate.sh
+    CURRENT_PROJECT_VERSION: "000000000000"  # overwritten by regenerate.sh
+    # Swift language version.
+    SWIFT_VERSION: "5.9"
+    # Treat warnings seriously but don't fail the build on them by default.
+    GCC_TREAT_WARNINGS_AS_ERRORS: NO
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+
+targets:
+  RightClickPasteKing:
+    type: application
+    platform: macOS
+
+    # ── Sources & resources ─────────────────────────────────────────────
+    sources:
+      - path: Sources
+        # Info.plist and the entitlements file are referenced explicitly via
+        # build settings below, so exclude them from the compile sources.
+        excludes:
+          - "Info.plist"
+          - "RightClickPasteKing.entitlements"
+      - path: Resources
+        # The asset catalog is a resource; XcodeGen adds it to the
+        # "Copy Bundle Resources" / asset compilation phase automatically.
+
+    dependencies:
+      - package: Sparkle
+
+    # ── Target build settings ───────────────────────────────────────────
+    settings:
+      base:
+        PRODUCT_NAME: RightClickPasteKing
+        PRODUCT_BUNDLE_IDENTIFIER: com.mrbco.RightClickPasteKing
+
+        # Info.plist: use the curated file in Sources/ rather than letting
+        # Xcode generate one.
+        INFOPLIST_FILE: Sources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+
+        # Entitlements: the App Sandbox is disabled in this file (a global
+        # CGEventTap cannot run sandboxed) — see the file's own comments.
+        CODE_SIGN_ENTITLEMENTS: Sources/RightClickPasteKing.entitlements
+
+        # App icon: the "AppIcon" set inside Resources/Assets.xcassets.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+        # ── Code signing ────────────────────────────────────────────────
+        # Manual signing with the Developer ID Application certificate, so
+        # the build is shippable and notarizable straight out of Xcode.
+        #
+        # DEVELOPMENT_TEAM is your Apple Developer Team ID. CODE_SIGN_IDENTITY
+        # "Developer ID Application" lets Xcode pick the matching cert from
+        # the keychain by type, so the exact certificate name doesn't need to
+        # be hardcoded.
+        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: E25J39RE3C
+        CODE_SIGN_IDENTITY: "Developer ID Application"
+
+        # Hardened Runtime is required for notarization.
+        ENABLE_HARDENED_RUNTIME: YES
+
+        # ── Misc ────────────────────────────────────────────────────────
+        # No Dock icon is handled by LSUIElement in Info.plist; this app has
+        # no main storyboard / XIB.
+        COMBINE_HIDPI_IMAGES: YES
+        # Keep dead-code stripping and the usual release optimizations at
+        # their Xcode defaults; nothing custom needed here.
+
+      configs:
+        # Release-specific tweaks. Debug inherits the base settings.
+        Release:
+          # Ensure release builds are fully optimized (Xcode default for
+          # Release, stated explicitly for clarity).
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+# ── Schemes ─────────────────────────────────────────────────────────────
+schemes:
+  RightClickPasteKing:
+    build:
+      targets:
+        RightClickPasteKing: all
+    run:
+      config: Debug
+    archive:
+      config: Release

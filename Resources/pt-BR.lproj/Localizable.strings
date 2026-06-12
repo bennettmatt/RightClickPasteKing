@@ -1,0 +1,38 @@
+/* RightClickPasteKing — Português (Brasil) */
+
+"menu.enabled" = "Ativado";
+"menu.clearAfterPaste" = "Limpar área de transferência após colar";
+"menu.clearAfterPaste.tooltip" = "Após colar com o clique direito, esvazia a área de transferência do sistema. Isso afeta todos os apps, não só o Terminal.";
+"menu.tintIcon" = "Ícone roxo quando a área de transferência tem texto";
+"menu.accessibility.checking" = "Acessibilidade: verificando…";
+"menu.accessibility.granted" = "Acessibilidade: concedida";
+"menu.accessibility.required" = "Acessibilidade: NÃO concedida — necessária";
+"menu.accessibility.notGranted" = "Acessibilidade: não concedida";
+"menu.openAccessibility" = "Abrir ajustes de Acessibilidade…";
+"menu.setupGuide" = "Guia de configuração…";
+"menu.launchAtLogin" = "Abrir ao iniciar a sessão";
+"menu.quit" = "Encerrar";
+"menu.recentCopies" = "Cópias recentes";
+"menu.recentCopies.empty" = "Nenhuma cópia recente";
+"menu.recentCopies.clear" = "Limpar histórico";
+"menu.checkForUpdates" = "Buscar atualizações…";
+
+"tooltip.active" = "RightClickPasteKing — ativo";
+"tooltip.needsPermission" = "RightClickPasteKing — precisa da permissão de Acessibilidade";
+"tooltip.disabled" = "RightClickPasteKing — desativado";
+
+"alert.loginItemError" = "Não foi possível alterar \"Abrir ao iniciar a sessão\": %@";
+
+"guide.explain.title.welcome" = "Bem-vindo ao RightClickPasteKing";
+"guide.explain.title.reference" = "RightClickPasteKing";
+"guide.explain.body" = "O clique direito no Terminal da Apple funciona como no Windows/Linux:\n\n•  Texto selecionado → o clique direito copia\n•  Nada selecionado → o clique direito cola a área de transferência\n•  Área de transferência vazia → o menu normal do Terminal aparece\n\nEle só age dentro do Terminal. Cliques em qualquer outro lugar ficam intactos.";
+"guide.explain.secondary" = "Dois padrões que você deve conhecer — ambos podem ser desativados a qualquer momento pelo ícone da barra de menus:\na área de transferência é limpa após cada colagem (cola uma vez e é consumida), e o app abre ao iniciar a sessão.";
+"guide.button.continue" = "Continuar";
+"guide.button.done" = "OK";
+"guide.permission.title" = "Uma permissão é necessária";
+"guide.permission.body" = "Para funcionar, o RightClickPasteKing precisa da permissão de Acessibilidade — é o que permite ver seu clique direito no Terminal e copiar ou colar por você.";
+"guide.permission.secondary" = "Clique abaixo para abrir os ajustes de Acessibilidade e ative o RightClickPasteKing na lista, ou arraste este ícone para ela.";
+"guide.permission.button" = "Abrir ajustes de Acessibilidade";
+"guide.permission.waiting" = "Aguardando a permissão…";
+"guide.success.title" = "Tudo pronto";
+"guide.success.body" = "O RightClickPasteKing está ativo.\n\nExperimente: copie um texto em qualquer lugar e clique com o botão direito no Terminal — ele cola. Selecione um texto no Terminal e clique com o botão direito — ele copia.";

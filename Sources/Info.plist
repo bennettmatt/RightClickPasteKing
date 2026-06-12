@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>RightClickPasteKing</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleDisplayName</key>
+    <string>RightClickPasteKing</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+    <!-- Version strings are driven by Xcode build settings, which are in
+         turn set from the VERSION file by project.yml / regenerate.sh:
+           MARKETING_VERSION       <- contents of VERSION (e.g. 1.0.0)
+           CURRENT_PROJECT_VERSION <- monotonic build number (UTC timestamp)
+         Do not hardcode versions here; edit the VERSION file and re-run
+         ./regenerate.sh. -->
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+
+    <key>CFBundlePackageType</key>
+    <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+
+    <!-- App icon: the "AppIcon" set in Resources/Assets.xcassets. Xcode
+         compiles the asset catalog and wires this up via the
+         ASSETCATALOG_COMPILER_APPICON_NAME build setting; no CFBundleIconFile
+         entry is needed. -->
+
+    <key>LSMinimumSystemVersion</key>
+    <string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+
+    <!-- Accessory app: lives in the menu bar, no Dock icon, no main window. -->
+    <key>LSUIElement</key>
+    <true/>
+
+    <!-- Single instance; standard. -->
+    <key>LSMultipleInstancesProhibited</key>
+    <true/>
+
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2026 Matthew Bennett. All rights reserved.</string>
+
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+
+    <!-- ── Sparkle auto-updates ─────────────────────────────────────────
+         SUFeedURL is the appcast the app polls for updates. It is BAKED
+         INTO every shipped build, so it must be final before the first
+         public release. The bennettmatt placeholder is stamped by
+         running ./configure-github.sh <username> once; release.sh refuses
+         to ship while the placeholder is present.
+         SUPublicEDKey is the ed25519 public half of the signing key whose
+         private half lives in the developer's keychain (generate_keys). -->
+    <key>SUFeedURL</key>
+    <string>https://bennettmatt.github.io/RightClickPasteKing/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>+pBek5siU1lXrJUd5OA5by3atGXlQ02v1TemqD1bzbQ=</string>
+</dict>
+</plist>

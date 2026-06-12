@@ -1,0 +1,38 @@
+/* RightClickPasteKing — 简体中文 */
+
+"menu.enabled" = "已启用";
+"menu.clearAfterPaste" = "粘贴后清空剪贴板";
+"menu.clearAfterPaste.tooltip" = "右键粘贴后清空系统剪贴板。这会影响所有应用，而不仅仅是终端。";
+"menu.tintIcon" = "剪贴板有文本时图标变紫";
+"menu.accessibility.checking" = "辅助功能：检查中…";
+"menu.accessibility.granted" = "辅助功能：已授权";
+"menu.accessibility.required" = "辅助功能：未授权 — 必需";
+"menu.accessibility.notGranted" = "辅助功能：未授权";
+"menu.openAccessibility" = "打开“辅助功能”设置…";
+"menu.setupGuide" = "设置向导…";
+"menu.launchAtLogin" = "登录时打开";
+"menu.quit" = "退出";
+"menu.recentCopies" = "最近拷贝";
+"menu.recentCopies.empty" = "没有最近拷贝";
+"menu.recentCopies.clear" = "清除历史记录";
+"menu.checkForUpdates" = "检查更新…";
+
+"tooltip.active" = "RightClickPasteKing — 运行中";
+"tooltip.needsPermission" = "RightClickPasteKing — 需要“辅助功能”权限";
+"tooltip.disabled" = "RightClickPasteKing — 已停用";
+
+"alert.loginItemError" = "无法更改“登录时打开”：%@";
+
+"guide.explain.title.welcome" = "欢迎使用 RightClickPasteKing";
+"guide.explain.title.reference" = "RightClickPasteKing";
+"guide.explain.body" = "在 Apple 终端中，右键点击的行为与 Windows/Linux 一致：\n\n•  已选中文本 → 右键点击即拷贝\n•  未选中任何内容 → 右键点击即粘贴剪贴板\n•  剪贴板为空 → 显示终端的正常菜单\n\n本应用只在终端内生效，其他位置的点击不受任何影响。";
+"guide.explain.secondary" = "两个默认开启的设置 — 都可以随时通过菜单栏图标关闭：\n每次粘贴后剪贴板会被清空（粘贴一次即消耗），且应用会在登录时自动打开。";
+"guide.button.continue" = "继续";
+"guide.button.done" = "完成";
+"guide.permission.title" = "需要一项权限";
+"guide.permission.body" = "RightClickPasteKing 需要“辅助功能”权限才能工作 — 它使应用能够检测您在终端中的右键点击，并为您拷贝或粘贴。";
+"guide.permission.secondary" = "点击下方按钮打开“辅助功能”设置，然后在列表中开启 RightClickPasteKing，或将此图标拖入列表。";
+"guide.permission.button" = "打开“辅助功能”设置";
+"guide.permission.waiting" = "正在等待授权…";
+"guide.success.title" = "全部就绪";
+"guide.success.body" = "RightClickPasteKing 已开始工作。\n\n试一试：在任意位置拷贝一段文字，然后在终端中右键点击 — 即粘贴。在终端中选中文字后右键点击 — 即拷贝。";
