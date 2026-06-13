@@ -4,6 +4,8 @@
 "menu.clearAfterPaste" = "Zwischenablage nach dem Einsetzen leeren";
 "menu.clearAfterPaste.tooltip" = "Leert nach einem Rechtsklick-Einsetzen die Zwischenablage des Systems. Das betrifft alle Apps, nicht nur das Terminal.";
 "menu.tintIcon" = "Violettes Symbol, wenn die Zwischenablage Text enthält";
+"menu.deselectAfterCopy" = "Auswahl nach dem Kopieren aufheben";
+"menu.deselectAfterCopy.tooltip" = "Nach dem Kopieren per Rechtsklick wird die Auswahl aufgehoben — der nächste Rechtsklick setzt ein, statt erneut zu kopieren.";
 "menu.accessibility.checking" = "Bedienungshilfen: wird geprüft…";
 "menu.accessibility.granted" = "Bedienungshilfen: erteilt";
 "menu.accessibility.required" = "Bedienungshilfen: NICHT erteilt — erforderlich";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "Warte auf die Berechtigung…";
 "guide.success.title" = "Alles bereit";
 "guide.success.body" = "RightClickPasteKing ist aktiv.\n\nProbieren Sie es aus: Kopieren Sie irgendwo Text und rechtsklicken Sie im Terminal — er wird eingesetzt. Wählen Sie Text im Terminal aus und rechtsklicken Sie — er wird kopiert.";
+
+/* Disk image installer */
+"dmg.move.title" = "In „Programme“ bewegen?";
+"dmg.move.body" = "RightClickPasteKing läuft von seinem Image. In den Ordner „Programme“ bewegen? Das Image wird danach ausgeworfen und in den Papierkorb gelegt.";
+"dmg.move.confirm" = "In „Programme“ bewegen";
+"dmg.move.cancel" = "Später";
+"dmg.move.failed" = "Konnte nicht in „Programme“ bewegt werden: %@";
+"dmg.cleanup.title" = "Image auswerfen?";
+"dmg.cleanup.body" = "Das RightClickPasteKing-Image ist noch aktiviert. Auswerfen und die .dmg-Datei in den Papierkorb legen?";
+"dmg.cleanup.confirm" = "Auswerfen und in den Papierkorb legen";
+"dmg.cleanup.cancel" = "Behalten";

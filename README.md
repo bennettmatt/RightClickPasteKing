@@ -186,6 +186,7 @@ scheme in Xcode.
 |---|---|
 | **Enabled** | Master on/off toggle. Persists across launches. Defaults to on. |
 | **Clear Clipboard After Paste** | When checked, the system clipboard is emptied after a right-click paste, making paste a "consume once" action. **This affects all apps, not just Terminal.** Persists across launches. Defaults to on. |
+| **Deselect After Copy** | When checked, a right-click copy also clears the selection (via a synthesized plain left-click — the only selection-clearing gesture in Terminal with no shell side effects). This completes the one-finger cycle: right-click copies and deselects, the next right-click pastes. Persists across launches. Defaults to on. |
 | **Purple Icon When Clipboard Has Text** | When checked, the menu bar icon turns purple while the clipboard holds text — a glanceable "right-click will paste" indicator (with clear-after-paste on, it visibly resets after each paste). Persists across launches. Defaults to on. |
 | **Recent Copies →** | The last 10 text copies, newest first. Selecting one puts it back on the clipboard — the recovery path for consumed pastes. **Memory only** (gone on quit, never written to disk); content marked concealed or transient by the source app (password managers) is never recorded. Includes a Clear History item. |
 | **Accessibility: …** | Live status of the required permission. |
@@ -287,6 +288,52 @@ a download this small.
 
 A **Check for Updates…** menu item triggers a manual check; scheduled
 background checks use Sparkle's defaults (consent prompt on first run).
+
+---
+
+## Testing
+
+Three layers, all of which gate `./release.sh`:
+
+**Static checks — `./check.sh`.** Localization completeness (every key in
+`L10n.swift` present in all seven languages and no orphans), VERSION
+format, Sparkle public key presence. Runs in seconds; run it any time.
+
+**Unit tests — `Tests/`.** XCTest coverage of the testable logic:
+`ClipboardHistory` recording, dedupe, capacity, the concealed/transient
+privacy exclusions, select-by-value, the text-state callback that drives
+the purple icon, and preview formatting. Tests run on isolated private
+pasteboards — never the real clipboard — and drive the watcher's poll
+directly, so they're deterministic and side-effect-free. The test bundle
+compiles `ClipboardHistory.swift` directly rather than hosting inside the
+app (hosting would *launch* the app: login-item auto-registration, the
+event tap, Sparkle). Run in Xcode (Cmd+U) or
+`xcodebuild test -project RightClickPasteKing.xcodeproj -scheme RightClickPasteKing -destination platform=macOS`.
+
+**Manual smoke sweep.** The gate-critical behaviors — the window-stack
+walk, the cursor and Dock-backdrop handling, the frontmost check — are
+live window-server interactions that cannot be unit-tested. `release.sh`
+prints the five-case checklist and requires explicit confirmation before
+shipping (`RCPK_SKIP_SMOKE=1` to bypass, deliberately ugly).
+
+---
+
+## Installer polish
+
+macOS provides none of the "nice DMG" behaviors natively — apps implement
+them. This one does both halves: **launched from the disk image** (directly
+or App-Translocated), it offers to move itself to /Applications, then
+relaunches the installed copy via a detached shell helper (required because
+`LSMultipleInstancesProhibited` forbids two live instances), which ejects
+the image and moves the .dmg to the Trash — one consent covers the whole
+sequence. **Launched from a normal install while the disk image is still
+mounted** (the user dragged it out properly), it asks whether to eject the
+image and trash the .dmg. The mount-to-.dmg mapping comes from
+`hdiutil info -plist`; trashing uses `FileManager.trashItem`, never a
+permanent delete, and only after every mount of that image ejected
+cleanly. While running from a disk image the first-launch login-item
+auto-registration is skipped (without burning its one-shot flag) — it
+would otherwise register a /Volumes path that dies when the image ejects.
 
 ---
 

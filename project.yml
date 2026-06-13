@@ -55,6 +55,7 @@ settings:
     # Treat warnings seriously but don't fail the build on them by default.
     GCC_TREAT_WARNINGS_AS_ERRORS: NO
     SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+    GENERATE_INFOPLIST_FILE: YES
 
 targets:
   RightClickPasteKing:
@@ -123,6 +124,28 @@ targets:
           # Release, stated explicitly for clarity).
           SWIFT_OPTIMIZATION_LEVEL: "-O"
 
+  # ── Unit tests ────────────────────────────────────────────────────────
+  # Compiles the testable logic (ClipboardHistory) directly into the test
+  # bundle instead of hosting tests inside the app — hosting would LAUNCH
+  # the app during testing (login-item auto-registration, event tap,
+  # Sparkle updater: all side effects tests must never trigger).
+  RightClickPasteKingTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests
+      - path: Sources/ClipboardHistory.swift
+      # DiskImageInstaller's plist parsing is under test; it references
+      # L10n symbols, so that file rides along (NSLocalizedString without
+      # the app's .strings files just returns the key — fine for tests).
+      - path: Sources/DiskImageInstaller.swift
+      - path: Sources/L10n.swift
+    settings:
+      base:
+        # Local test bundle: default automatic signing, no Developer ID.
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+
 # ── Schemes ─────────────────────────────────────────────────────────────
 schemes:
   RightClickPasteKing:
@@ -131,5 +154,8 @@ schemes:
         RightClickPasteKing: all
     run:
       config: Debug
+    test:
+      targets:
+        - RightClickPasteKingTests
     archive:
       config: Release

@@ -90,8 +90,56 @@ if gh release view "$TAG" --repo "$GH_USER/$GH_REPO" >/dev/null 2>&1; then
     exit 1
 fi
 
+# ── 0. Test gates ───────────────────────────────────────────────────────
+# Three layers, all blocking:
+#   a) static checks (l10n completeness, version format, Sparkle key)
+#   b) unit tests (ClipboardHistory logic, on isolated pasteboards)
+#   c) the manual smoke sweep — the gate-critical behaviors (cursor, Dock,
+#      window stack) are live window-server interactions that CANNOT be
+#      unit-tested; this prompt makes shipping without checking them
+#      impossible rather than pretending they're covered.
+#      Skippable only explicitly: RCPK_SKIP_SMOKE=1 ./release.sh
+
+echo "==> Static checks"
+./check.sh
+
 # ── 1+2. Build, notarize, package ───────────────────────────────────────
 ./regenerate.sh
+
+echo "==> Unit tests"
+TEST_LOG="$(mktemp -t rcpk-tests)"
+if ! xcodebuild test \
+        -project "$APP_NAME.xcodeproj" \
+        -scheme "$APP_NAME" \
+        -destination "platform=macOS" \
+        > "$TEST_LOG" 2>&1; then
+    echo "ERROR: unit tests failed. Tail of output:" >&2
+    tail -40 "$TEST_LOG" >&2
+    echo "(full log: $TEST_LOG)" >&2
+    exit 1
+fi
+grep -E "Executed [0-9]+ tests" "$TEST_LOG" | tail -1 || true
+rm -f "$TEST_LOG"
+
+if [[ "${RCPK_SKIP_SMOKE:-0}" != "1" ]]; then
+    cat << 'SMOKE'
+
+==> Manual smoke sweep — run these on the build you are about to ship:
+    1. Select text in Terminal, right-click          -> copies, deselects
+    2. No selection, full clipboard, right-click      -> pastes, icon discharges
+    3. No selection, empty clipboard, right-click     -> Terminal's menu (slightly late)
+    4. Right-click a Dock icon (Terminal window
+       positioned behind the Dock)                    -> Dock menu, no paste
+    5. Right-click in Safari, Terminal open behind    -> Safari's menu, instant
+
+SMOKE
+    read -r -p "All five pass on the current build? [y/N] " SMOKE_OK
+    if [[ ! "$SMOKE_OK" =~ ^[Yy]$ ]]; then
+        echo "Aborting release — run the sweep, then re-run ./release.sh" >&2
+        exit 1
+    fi
+fi
+
 ./notarize.sh
 
 if [[ ! -f "$DMG" ]]; then

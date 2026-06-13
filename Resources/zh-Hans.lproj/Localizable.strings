@@ -4,12 +4,14 @@
 "menu.clearAfterPaste" = "粘贴后清空剪贴板";
 "menu.clearAfterPaste.tooltip" = "右键粘贴后清空系统剪贴板。这会影响所有应用，而不仅仅是终端。";
 "menu.tintIcon" = "剪贴板有文本时图标变紫";
+"menu.deselectAfterCopy" = "拷贝后取消选择";
+"menu.deselectAfterCopy.tooltip" = "右键拷贝所选内容后自动取消选择——下一次右键点击即为粘贴，而不是再次拷贝。";
 "menu.accessibility.checking" = "辅助功能：检查中…";
 "menu.accessibility.granted" = "辅助功能：已授权";
 "menu.accessibility.required" = "辅助功能：未授权 — 必需";
 "menu.accessibility.notGranted" = "辅助功能：未授权";
 "menu.openAccessibility" = "打开“辅助功能”设置…";
-"menu.setupGuide" = "设置向导…";
+"menu.setupGuide" = "设置助理…";
 "menu.launchAtLogin" = "登录时打开";
 "menu.quit" = "退出";
 "menu.recentCopies" = "最近拷贝";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "正在等待授权…";
 "guide.success.title" = "全部就绪";
 "guide.success.body" = "RightClickPasteKing 已开始工作。\n\n试一试：在任意位置拷贝一段文字，然后在终端中右键点击 — 即粘贴。在终端中选中文字后右键点击 — 即拷贝。";
+
+/* Disk image installer */
+"dmg.move.title" = "移到“应用程序”？";
+"dmg.move.body" = "RightClickPasteKing 正从磁盘映像运行。要将它移到“应用程序”文件夹吗？随后磁盘映像将被推出，.dmg 文件将被移到废纸篓。";
+"dmg.move.confirm" = "移到“应用程序”";
+"dmg.move.cancel" = "暂不";
+"dmg.move.failed" = "无法移到“应用程序”：%@";
+"dmg.cleanup.title" = "推出磁盘映像？";
+"dmg.cleanup.body" = "RightClickPasteKing 的磁盘映像仍处于装载状态。要推出并将 .dmg 文件移到废纸篓吗？";
+"dmg.cleanup.confirm" = "推出并移到废纸篓";
+"dmg.cleanup.cancel" = "保留";

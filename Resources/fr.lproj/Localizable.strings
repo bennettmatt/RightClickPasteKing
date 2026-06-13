@@ -4,6 +4,8 @@
 "menu.clearAfterPaste" = "Vider le presse-papiers après le collage";
 "menu.clearAfterPaste.tooltip" = "Après un collage par clic droit, vide le presse-papiers du système. Cela concerne toutes les apps, pas seulement Terminal.";
 "menu.tintIcon" = "Icône violette quand le presse-papiers contient du texte";
+"menu.deselectAfterCopy" = "Désélectionner après la copie";
+"menu.deselectAfterCopy.tooltip" = "Après la copie d’une sélection par clic droit, la sélection est annulée — le clic droit suivant colle au lieu de recopier.";
 "menu.accessibility.checking" = "Accessibilité : vérification…";
 "menu.accessibility.granted" = "Accessibilité : accordée";
 "menu.accessibility.required" = "Accessibilité : NON accordée — requise";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "En attente de l'autorisation…";
 "guide.success.title" = "Tout est prêt";
 "guide.success.body" = "RightClickPasteKing est actif.\n\nEssayez : copiez du texte n'importe où, puis faites un clic droit dans Terminal — il colle. Sélectionnez du texte dans Terminal et faites un clic droit — il copie.";
+
+/* Disk image installer */
+"dmg.move.title" = "Déplacer vers Applications ?";
+"dmg.move.body" = "RightClickPasteKing s’exécute depuis son image disque. Le déplacer vers le dossier Applications ? L’image disque sera ensuite éjectée et placée dans la corbeille.";
+"dmg.move.confirm" = "Déplacer vers Applications";
+"dmg.move.cancel" = "Plus tard";
+"dmg.move.failed" = "Impossible de déplacer vers Applications : %@";
+"dmg.cleanup.title" = "Éjecter l’image disque ?";
+"dmg.cleanup.body" = "L’image disque de RightClickPasteKing est toujours montée. L’éjecter et placer le fichier .dmg dans la corbeille ?";
+"dmg.cleanup.confirm" = "Éjecter et placer dans la corbeille";
+"dmg.cleanup.cancel" = "La laisser";

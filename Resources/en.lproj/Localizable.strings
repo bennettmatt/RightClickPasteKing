@@ -4,6 +4,8 @@
 "menu.clearAfterPaste" = "Clear Clipboard After Paste";
 "menu.clearAfterPaste.tooltip" = "After a right-click paste, empty the system clipboard. This affects all apps, not just Terminal.";
 "menu.tintIcon" = "Purple Icon When Clipboard Has Text";
+"menu.deselectAfterCopy" = "Deselect After Copy";
+"menu.deselectAfterCopy.tooltip" = "After right-click copies a selection, clear it — so the next right-click pastes instead of copying again.";
 "menu.accessibility.checking" = "Accessibility: checking…";
 "menu.accessibility.granted" = "Accessibility: granted";
 "menu.accessibility.required" = "Accessibility: NOT granted — required";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "Waiting for permission…";
 "guide.success.title" = "You're all set";
 "guide.success.body" = "RightClickPasteKing is active.\n\nTry it: copy some text anywhere, then right-click in Terminal — it pastes. Select text in Terminal and right-click — it copies.";
+
+/* Disk image installer */
+"dmg.move.title" = "Move to Applications?";
+"dmg.move.body" = "RightClickPasteKing is running from its disk image. Move it to the Applications folder? The disk image will then be ejected and moved to the Trash.";
+"dmg.move.confirm" = "Move to Applications";
+"dmg.move.cancel" = "Not Now";
+"dmg.move.failed" = "Couldn’t move to Applications: %@";
+"dmg.cleanup.title" = "Eject the disk image?";
+"dmg.cleanup.body" = "The RightClickPasteKing disk image is still mounted. Eject it and move the .dmg file to the Trash?";
+"dmg.cleanup.confirm" = "Eject and Move to Trash";
+"dmg.cleanup.cancel" = "Leave It";

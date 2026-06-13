@@ -4,6 +4,8 @@
 "menu.clearAfterPaste" = "Limpar área de transferência após colar";
 "menu.clearAfterPaste.tooltip" = "Após colar com o clique direito, esvazia a área de transferência do sistema. Isso afeta todos os apps, não só o Terminal.";
 "menu.tintIcon" = "Ícone roxo quando a área de transferência tem texto";
+"menu.deselectAfterCopy" = "Desmarcar seleção após copiar";
+"menu.deselectAfterCopy.tooltip" = "Depois que o clique direito copia uma seleção, ela é desmarcada — assim o próximo clique direito cola em vez de copiar de novo.";
 "menu.accessibility.checking" = "Acessibilidade: verificando…";
 "menu.accessibility.granted" = "Acessibilidade: concedida";
 "menu.accessibility.required" = "Acessibilidade: NÃO concedida — necessária";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "Aguardando a permissão…";
 "guide.success.title" = "Tudo pronto";
 "guide.success.body" = "O RightClickPasteKing está ativo.\n\nExperimente: copie um texto em qualquer lugar e clique com o botão direito no Terminal — ele cola. Selecione um texto no Terminal e clique com o botão direito — ele copia.";
+
+/* Disk image installer */
+"dmg.move.title" = "Mover para Aplicativos?";
+"dmg.move.body" = "O RightClickPasteKing está sendo executado a partir da imagem de disco. Movê-lo para a pasta Aplicativos? Em seguida, a imagem de disco será ejetada e movida para o Lixo.";
+"dmg.move.confirm" = "Mover para Aplicativos";
+"dmg.move.cancel" = "Agora não";
+"dmg.move.failed" = "Não foi possível mover para Aplicativos: %@";
+"dmg.cleanup.title" = "Ejetar a imagem de disco?";
+"dmg.cleanup.body" = "A imagem de disco do RightClickPasteKing ainda está montada. Ejetá-la e mover o arquivo .dmg para o Lixo?";
+"dmg.cleanup.confirm" = "Ejetar e mover para o Lixo";
+"dmg.cleanup.cancel" = "Deixar";

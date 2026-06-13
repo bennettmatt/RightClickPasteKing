@@ -4,6 +4,8 @@
 "menu.clearAfterPaste" = "Vaciar el portapapeles tras pegar";
 "menu.clearAfterPaste.tooltip" = "Después de pegar con clic derecho, vacía el portapapeles del sistema. Esto afecta a todas las apps, no solo a Terminal.";
 "menu.tintIcon" = "Icono morado cuando el portapapeles tiene texto";
+"menu.deselectAfterCopy" = "Deseleccionar después de copiar";
+"menu.deselectAfterCopy.tooltip" = "Tras copiar una selección con clic derecho, se anula la selección — así el siguiente clic derecho pega en lugar de volver a copiar.";
 "menu.accessibility.checking" = "Accesibilidad: comprobando…";
 "menu.accessibility.granted" = "Accesibilidad: concedida";
 "menu.accessibility.required" = "Accesibilidad: NO concedida — necesaria";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "Esperando el permiso…";
 "guide.success.title" = "Todo listo";
 "guide.success.body" = "RightClickPasteKing está activo.\n\nPruébalo: copia un texto en cualquier app y haz clic derecho en Terminal — se pega. Selecciona texto en Terminal y haz clic derecho — se copia.";
+
+/* Disk image installer */
+"dmg.move.title" = "¿Mover a Aplicaciones?";
+"dmg.move.body" = "RightClickPasteKing se está ejecutando desde su imagen de disco. ¿Moverlo a la carpeta Aplicaciones? Después, la imagen de disco se expulsará y se moverá a la papelera.";
+"dmg.move.confirm" = "Mover a Aplicaciones";
+"dmg.move.cancel" = "Ahora no";
+"dmg.move.failed" = "No se pudo mover a Aplicaciones: %@";
+"dmg.cleanup.title" = "¿Expulsar la imagen de disco?";
+"dmg.cleanup.body" = "La imagen de disco de RightClickPasteKing sigue montada. ¿Expulsarla y mover el archivo .dmg a la papelera?";
+"dmg.cleanup.confirm" = "Expulsar y mover a la papelera";
+"dmg.cleanup.cancel" = "Dejarla";

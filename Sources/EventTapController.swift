@@ -106,6 +106,14 @@ final class EventTapController {
     /// app, not just Terminal.
     var clearClipboardAfterPaste: Bool = true
 
+    /// When true, a right-click COPY is followed by a synthesized plain
+    /// left-click at the same spot, clearing the selection — so the very
+    /// next right-click pastes instead of re-copying. Set by AppDelegate
+    /// from the user's preference; defaults to ON. A plain left-click is
+    /// the one selection-clearing gesture in Terminal with no shell side
+    /// effects (arrow keys and Escape all send input to the shell).
+    var deselectAfterCopy: Bool = true
+
     // MARK: - State
 
     private var eventTap: CFMachPort?
@@ -332,92 +340,91 @@ final class EventTapController {
                                            .excludeDesktopElements]
         guard let infoList = CGWindowListCopyWindowInfo(options, kCGNullWindowID)
                 as? [[String: Any]] else {
-            // The window list query failed (rare). The frontmost gate has
-            // already passed by the time we're called, so degrading to the
-            // frontmost answer preserves the old (pre-window-check) behavior
-            // rather than going dead.
-            return isTerminalFrontmost()
+            // FAIL OPEN. The frontmost gate has already passed by the time
+            // we're called; if the window list is unavailable, degrade to
+            // the frontmost-only behavior (which always worked) rather than
+            // going dead. A defensive check must never be able to take the
+            // core function down with it.
+            Self.log.info("window walk: list unavailable — fail-open")
+            return true
         }
 
-        // The list is returned in z-order, front to back. The FIRST visible
-        // window whose bounds contain the click point — whatever its layer —
-        // is the thing the user actually clicked. We act only if that first
-        // hit is a NORMAL-LAYER window owned by Terminal.
+        Self.log.info("window walk: \(infoList.count, privacy: .public) windows, click=(\(Int(clickLocation.x), privacy: .public),\(Int(clickLocation.y), privacy: .public))")
+
+        // Walk front-to-back. Two independent questions:
         //
-        // The layer check must work this way (first-hit decides) and NOT as
-        // "skip non-normal layers and keep searching underneath": the Dock,
-        // the menu bar, notification banners etc. live in higher layers, and
-        // a Terminal window's BOUNDS can extend under the Dock region (tall
-        // windows, auto-hidden Dock, restored layouts). Skipping the Dock
-        // and matching the Terminal window beneath it would misattribute a
-        // Dock click to Terminal — swallowing the click and pasting. The
-        // click target is whatever is visually on top at that point, period.
-        // The mouse CURSOR is itself a window: the window server draws it
-        // as a real entry in this list, at the dedicated cursor window
-        // level, with bounds that contain the cursor position — which means
-        // its bounds contain THE CLICK POINT ON EVERY CLICK, by definition.
-        // Without skipping it, the first-hit rule below would stop at the
-        // cursor on every walk, conclude "not a normal-layer Terminal
-        // window", and the gate would never pass — silently disabling the
-        // entire app. (Exactly that bug shipped briefly.) The level is
-        // queried from the system rather than hardcoded.
-        let cursorLayer = Int(CGWindowLevelForKey(.cursorWindow))
-        Self.log.info("window walk: \(infoList.count, privacy: .public) windows, cursorLevel=\(cursorLayer, privacy: .public)")
-
+        //  1. Is the first NORMAL-layer (0) window containing the point a
+        //     Terminal window? Windows in higher layers — the cursor (whose
+        //     bounds contain EVERY click by definition), the menu bar,
+        //     banners, overlays — are SKIPPED, never blocking. Treating
+        //     them as the click target is the design that silently killed
+        //     the whole app.
+        //
+        //  2. Does any window under the point belong to the Dock
+        //     (com.apple.dock)? Then the user clicked Dock UI and we must
+        //     pass the click through, no matter what sits beneath it. This
+        //     is the narrow, ownership-based fix for the "right-click on a
+        //     Dock icon pasted into the Terminal window whose bounds extend
+        //     under the Dock" bug. Dock windows live above layer 0, so in
+        //     front-to-back order this is always decided before question 1.
         for info in infoList {
-            let layer = info[kCGWindowLayer as String] as? Int ?? -1
-            let ownerName = info[kCGWindowOwnerName as String] as? String ?? "?"
+            guard let boundsDict = info[kCGWindowBounds as String] as? [String: Any],
+                  let bounds = CGRect(dictionaryRepresentation: boundsDict as CFDictionary),
+                  bounds.contains(clickLocation)
+            else { continue }
 
-            // Skip the cursor (see above) — it overlays every click point
-            // and is never what the user is clicking ON.
-            if layer == cursorLayer {
-                Self.log.info("  skip cursor-level window owner=\(ownerName, privacy: .public)")
-                continue
-            }
-
-            // Skip fully transparent windows. Some apps park invisible
-            // (alpha == 0) normal-layer windows over large screen areas;
-            // they aren't what the user sees or clicks.
+            // Invisible windows are not click targets.
             if let alpha = info[kCGWindowAlpha as String] as? Double, alpha <= 0 {
                 continue
             }
 
-            guard let boundsDict = info[kCGWindowBounds as String] as? [String: Any],
-                  let bounds = CGRect(dictionaryRepresentation: boundsDict as CFDictionary)
-            else { continue }
+            let layer = info[kCGWindowLayer as String] as? Int ?? -1
+            let ownerName = info[kCGWindowOwnerName as String] as? String ?? "?"
+            let ownerPID = info[kCGWindowOwnerPID as String] as? Int32
+            let bundleID = ownerPID.flatMap {
+                NSRunningApplication(processIdentifier: $0)?.bundleIdentifier
+            }
 
-            guard bounds.contains(clickLocation) else { continue }
+            Self.log.info("  hit: owner=\(ownerName, privacy: .public) bundle=\(bundleID ?? "?", privacy: .public) layer=\(layer, privacy: .public)")
 
-            // First visible window at the click point: this IS the click
-            // target. Decide based on it alone — never look underneath.
-            Self.log.info("  first hit: owner=\(ownerName, privacy: .public) layer=\(layer, privacy: .public) bounds=(\(Int(bounds.origin.x), privacy: .public),\(Int(bounds.origin.y), privacy: .public) \(Int(bounds.width), privacy: .public)x\(Int(bounds.height), privacy: .public))")
-
-            // kCGWindowLayer 0 == the normal window layer. If the topmost
-            // window here is in any other layer (Dock, menu bar, banners,
-            // open menus), the click belongs to that UI, not to Terminal.
-            guard layer == 0 else {
-                Self.log.info("  -> non-normal layer, not Terminal")
+            // Question 2: Dock UI under the click — pass through. But the
+            // Dock PROCESS owns more than the Dock bar: wallpaper and
+            // Spaces/fullscreen backdrops are display-sized Dock-owned
+            // windows at the Dock level that sit in front of everything and
+            // contain EVERY click (a captured trace showed exactly that
+            // vetoing all clicks). Only the BAR is clickable Dock UI, and
+            // the bar is a strip — so discriminate by size: a Dock window
+            // covering ~the whole display is a backdrop and is skipped like
+            // any other overlay; anything smaller is real Dock UI.
+            if bundleID == "com.apple.dock" {
+                var display = CGDirectDisplayID(0)
+                var matchCount: UInt32 = 0
+                CGGetDisplaysWithPoint(clickLocation, 1, &display, &matchCount)
+                if matchCount > 0 {
+                    let displayBounds = CGDisplayBounds(display)
+                    let coversDisplay =
+                        bounds.width  >= displayBounds.width  * 0.9 &&
+                        bounds.height >= displayBounds.height * 0.9
+                    if coversDisplay {
+                        Self.log.info("  skip: display-sized Dock backdrop")
+                        continue
+                    }
+                }
+                Self.log.info("  -> Dock UI under click — not Terminal")
                 return false
             }
 
-            // Identify the owner by PID -> bundle identifier (locale-proof,
-            // unlike the localized kCGWindowOwnerName).
-            guard let ownerPID = info[kCGWindowOwnerPID as String] as? Int32,
-                  let ownerApp = NSRunningApplication(processIdentifier: ownerPID)
-            else {
-                Self.log.info("  -> owner PID unresolvable, not Terminal")
-                return false
+            // Question 1: first normal-layer window decides.
+            if layer == 0 {
+                let isTerminal = bundleID == EventTapController.terminalBundleID
+                Self.log.info("  -> first layer-0 window: terminal=\(isTerminal, privacy: .public)")
+                return isTerminal
             }
-            let bundleID = ownerApp.bundleIdentifier ?? "nil"
-            let isTerminal = bundleID == EventTapController.terminalBundleID
-            Self.log.info("  -> owner bundle=\(bundleID, privacy: .public) terminal=\(isTerminal, privacy: .public)")
-            return isTerminal
+            // Higher-layer non-Dock window (cursor, menu bar, banner,
+            // overlay): skip and keep walking.
         }
 
-        Self.log.info("  -> no visible window contained the click point")
-
-        // Click didn't land on any visible normal-layer window (e.g. clicked
-        // on the desktop, the Dock, or between windows). Not on Terminal.
+        Self.log.info("  -> no layer-0 window contained the point — not Terminal")
         return false
     }
 
@@ -455,6 +462,12 @@ final class EventTapController {
 
             if changeCountAfterCopy != changeCountBeforeCopy {
                 Self.log.info("decision: selection copied")
+                // Optionally clear the selection so the next right-click
+                // pastes instead of copying the same text again. Uses the
+                // click location of the original event.
+                if self.deselectAfterCopy, let click = originalClick {
+                    self.synthesizeDeselectClick(at: click.location)
+                }
                 // A selection existed and was copied. Behavior complete:
                 // right-click-with-selection == copy, regardless of what the
                 // clipboard held before. The clipboard is NOT cleared here —
@@ -538,6 +551,53 @@ final class EventTapController {
 
         down.post(tap: .cgSessionEventTap)
         up.post(tap: .cgSessionEventTap)
+    }
+
+    /// Posts a plain left-click (down+up, single-click state) at `location`
+    /// to clear Terminal's selection after a right-click copy. A plain
+    /// left-click in Terminal deselects without sending anything to the
+    /// shell — it's exactly the gesture a user would make by hand. Stamped
+    /// with our magic for uniformity (the tap only listens for right-mouse-
+    /// down, so these never re-enter it regardless).
+    private func synthesizeDeselectClick(at location: CGPoint) {
+        guard let down = CGEvent(mouseEventSource: nil,
+                                 mouseType: .leftMouseDown,
+                                 mouseCursorPosition: location,
+                                 mouseButton: .left),
+              let up = CGEvent(mouseEventSource: nil,
+                               mouseType: .leftMouseUp,
+                               mouseCursorPosition: location,
+                               mouseButton: .left) else {
+            return
+        }
+        // EXPLICITLY flag-less. Events created with a nil source can carry
+        // the session's current modifier state — and we've just synthesized
+        // Cmd+C, so a stale ⌘ here would turn this into Cmd+click (URL/link
+        // handling in Terminal) instead of a plain deselecting click.
+        down.flags = []
+        up.flags = []
+        // Explicit single-click state so the system never coalesces this
+        // with a nearby real click into a double-click (which would SELECT
+        // a word — the exact opposite of the goal).
+        down.setIntegerValueField(.mouseEventClickState, value: 1)
+        up.setIntegerValueField(.mouseEventClickState, value: 1)
+        down.setIntegerValueField(.eventSourceUserData,
+                                  value: EventTapController.synthesizedEventMagic)
+        up.setIntegerValueField(.eventSourceUserData,
+                                value: EventTapController.synthesizedEventMagic)
+
+        // Post the up a beat after the down, like a real click. The click
+        // lands INSIDE the just-copied selection, and Terminal treats
+        // mouse-down-in-selection as a potential drag of the selected text,
+        // deferring the deselect decision until the up; a zero-duration
+        // down+up is the degenerate case of that logic. ~30 ms reads as an
+        // unambiguous click.
+        down.post(tap: .cgSessionEventTap)
+        Self.log.info("decision: deselect click — down posted")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) {
+            up.post(tap: .cgSessionEventTap)
+            Self.log.info("decision: deselect click — up posted")
+        }
     }
 
     // MARK: - Clipboard inspection

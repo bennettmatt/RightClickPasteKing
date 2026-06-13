@@ -33,6 +33,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         static let enabled = "TRCP.enabled"
         static let clearClipboardAfterPaste = "TRCP.clearClipboardAfterPaste"
         static let tintIconWhenClipboardFull = "TRCP.tintIconWhenClipboardFull"
+        static let deselectAfterCopy = "TRCP.deselectAfterCopy"
         /// One-shot flag: have we ever attempted the first-launch auto-
         /// registration of the login item? Set the first time the app runs
         /// and never read again after that — its only purpose is to ensure
@@ -52,6 +53,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var openPermissionMenuItem: NSMenuItem!
     private var setupGuideMenuItem: NSMenuItem!
     private var clearAfterPasteMenuItem: NSMenuItem!
+    private var deselectAfterCopyMenuItem: NSMenuItem!
     private var tintIconMenuItem: NSMenuItem!
     private var recentCopiesMenuItem: NSMenuItem!
     private let recentCopiesSubmenu = NSMenu()
@@ -141,15 +143,42 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    /// Whether a right-click copy also clears the selection, so the next
+    /// right-click pastes instead of re-copying. Defaults to ON.
+    private var deselectAfterCopy: Bool {
+        get {
+            if UserDefaults.standard.object(forKey: DefaultsKey.deselectAfterCopy) == nil {
+                return true
+            }
+            return UserDefaults.standard.bool(forKey: DefaultsKey.deselectAfterCopy)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: DefaultsKey.deselectAfterCopy)
+        }
+    }
+
     // MARK: - Lifecycle
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Disk-image installer flow FIRST, before any other launch work:
+        // if we're running from the DMG and the user accepts the move to
+        // /Applications, this process is about to terminate and relaunch —
+        // nothing else (login item, watchers, first-run window) should
+        // happen in that case.
+        if DiskImageInstaller.offerMoveToApplicationsIfNeeded() {
+            return
+        }
+        // Relaunched-with-consent case: silently eject our image and trash
+        // the .dmg, then continue a normal launch.
+        DiskImageInstaller.performConsentedCleanupIfRequested()
+
         buildStatusItem()
         buildMenu()
 
         // Push the persisted "clear clipboard after paste" preference into
         // the tap controller before it starts handling clicks.
         tapController.clearClipboardAfterPaste = clearClipboardAfterPaste
+        tapController.deselectAfterCopy = deselectAfterCopy
 
         // First-launch-only: enable Launch at Login by default. We use a
         // sticky one-shot flag in UserDefaults so this only ever fires the
@@ -190,6 +219,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if !AccessibilityPermission.isGranted {
             showFirstRunWindow()
         }
+
+        // Dragged-properly-but-DMG-still-mounted case: offer to eject the
+        // image and trash the .dmg. Delayed a beat so it doesn't land on
+        // top of the first-run window appearing.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DiskImageInstaller.offerCleanupOfLeftoverImage()
+        }
     }
 
     /// On the very first launch ever, register the app as a login item so
@@ -200,6 +236,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// > General > Login Items), the user can still turn it on manually from
     /// the app's menu.
     private func autoRegisterLoginItemIfFirstLaunch() {
+        // Never auto-register while running from a disk image (or App
+        // Translocation): SMAppService registers the RUNNING bundle's path,
+        // and a /Volumes path is dead the moment the image ejects. The
+        // one-shot flag is deliberately NOT burned here — the registration
+        // should still happen on the first launch from a real install
+        // location.
+        guard !DiskImageInstaller.isRunningFromDiskImage else { return }
+
         let defaults = UserDefaults.standard
         guard !defaults.bool(forKey: DefaultsKey.didAutoRegisterLoginItem) else {
             return
@@ -275,6 +319,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         clearAfterPasteMenuItem.target = self
         clearAfterPasteMenuItem.toolTip = L10n.menuClearAfterPasteTooltip
         menu.addItem(clearAfterPasteMenuItem)
+
+        // Deselect-after-copy toggle: completes the one-finger cycle —
+        // right-click copies AND deselects, so the next right-click pastes.
+        deselectAfterCopyMenuItem = NSMenuItem(title: L10n.menuDeselectAfterCopy,
+                                               action: #selector(toggleDeselectAfterCopy(_:)),
+                                               keyEquivalent: "")
+        deselectAfterCopyMenuItem.target = self
+        deselectAfterCopyMenuItem.toolTip = L10n.menuDeselectAfterCopyTooltip
+        menu.addItem(deselectAfterCopyMenuItem)
 
         // Purple-icon-when-clipboard-full toggle. Cosmetic feedback; the
         // tint itself is applied by refreshStatusItemTint().
@@ -419,6 +472,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Push the change straight into the tap controller so it takes
         // effect on the very next paste — no relaunch needed.
         tapController.clearClipboardAfterPaste = newValue
+        refreshMenuState()
+    }
+
+    @objc private func toggleDeselectAfterCopy(_ sender: NSMenuItem) {
+        let newValue = !deselectAfterCopy
+        deselectAfterCopy = newValue
+        tapController.deselectAfterCopy = newValue
         refreshMenuState()
     }
 
@@ -572,7 +632,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // it's a behavior preference, not something gated on the tap running.
         clearAfterPasteMenuItem.state = clearClipboardAfterPaste ? .on : .off
 
-        // Same for the purple-icon toggle.
+        // Same for the deselect-after-copy and purple-icon toggles.
+        deselectAfterCopyMenuItem.state = deselectAfterCopy ? .on : .off
         tintIconMenuItem.state = tintIconWhenClipboardFull ? .on : .off
 
         if hasPermission {

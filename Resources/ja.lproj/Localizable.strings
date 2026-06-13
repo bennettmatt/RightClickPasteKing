@@ -4,6 +4,8 @@
 "menu.clearAfterPaste" = "ペースト後にクリップボードを消去";
 "menu.clearAfterPaste.tooltip" = "右クリックでペーストした後、システムのクリップボードを空にします。ターミナルだけでなく、すべてのアプリに影響します。";
 "menu.tintIcon" = "クリップボードにテキストがあるときアイコンを紫色に";
+"menu.deselectAfterCopy" = "コピー後に選択を解除";
+"menu.deselectAfterCopy.tooltip" = "右クリックで選択範囲をコピーした後、選択を解除します。次の右クリックは再コピーではなくペーストになります。";
 "menu.accessibility.checking" = "アクセシビリティ: 確認中…";
 "menu.accessibility.granted" = "アクセシビリティ: 許可済み";
 "menu.accessibility.required" = "アクセシビリティ: 未許可 — 必須です";
@@ -36,3 +38,14 @@
 "guide.permission.waiting" = "許可を待っています…";
 "guide.success.title" = "準備完了";
 "guide.success.body" = "RightClickPasteKing が動作中です。\n\n試してみましょう: どこかでテキストをコピーして、ターミナルで右クリック — ペーストされます。ターミナルでテキストを選択して右クリック — コピーされます。";
+
+/* Disk image installer */
+"dmg.move.title" = "アプリケーションに移動しますか？";
+"dmg.move.body" = "RightClickPasteKing はディスクイメージから実行されています。アプリケーションフォルダに移動しますか？その後、ディスクイメージは取り出され、.dmg ファイルはゴミ箱に入れられます。";
+"dmg.move.confirm" = "アプリケーションに移動";
+"dmg.move.cancel" = "今はしない";
+"dmg.move.failed" = "アプリケーションに移動できませんでした: %@";
+"dmg.cleanup.title" = "ディスクイメージを取り出しますか？";
+"dmg.cleanup.body" = "RightClickPasteKing のディスクイメージがまだマウントされています。取り出して .dmg ファイルをゴミ箱に入れますか？";
+"dmg.cleanup.confirm" = "取り出してゴミ箱へ";
+"dmg.cleanup.cancel" = "そのままにする";

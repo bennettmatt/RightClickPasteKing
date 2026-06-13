@@ -46,6 +46,11 @@ final class ClipboardHistory {
 
     // MARK: - State
 
+    /// The pasteboard being watched. NSPasteboard.general in the app;
+    /// tests inject isolated private pasteboards so they never touch (or
+    /// depend on) the user's real clipboard.
+    private let pasteboard: NSPasteboard
+
     /// Newest first. Memory only — never persisted.
     private(set) var entries: [String] = []
 
@@ -58,7 +63,7 @@ final class ClipboardHistory {
     var onTextStateChange: ((Bool) -> Void)?
 
     private var pollTimer: Timer?
-    private var lastSeenChangeCount: Int = NSPasteboard.general.changeCount
+    private var lastSeenChangeCount: Int
 
     /// Last reported value of "clipboard has a string type", so the
     /// callback fires only on transitions.
@@ -68,6 +73,13 @@ final class ClipboardHistory {
     /// next poll tick doesn't re-process our own write.
     private var ignoreNextChange = false
 
+    /// `pasteboard` defaults to the system clipboard; tests pass an
+    /// isolated NSPasteboard(name:) instead.
+    init(pasteboard: NSPasteboard = .general) {
+        self.pasteboard = pasteboard
+        self.lastSeenChangeCount = pasteboard.changeCount
+    }
+
     // MARK: - Lifecycle
 
     /// Begins watching the pasteboard. Idempotent.
@@ -75,11 +87,11 @@ final class ClipboardHistory {
         guard pollTimer == nil else { return }
         // Capture the current count so pre-existing clipboard contents are
         // not retroactively recorded — we only record changes from now on.
-        lastSeenChangeCount = NSPasteboard.general.changeCount
+        lastSeenChangeCount = pasteboard.changeCount
 
         // Report the INITIAL text state so the icon tint is correct from
         // launch, even though pre-existing contents aren't recorded.
-        lastHasText = Self.hasStringType(NSPasteboard.general)
+        lastHasText = Self.hasStringType(pasteboard)
         onTextStateChange?(lastHasText)
 
         let timer = Timer(timeInterval: Self.pollInterval, repeats: true) { [weak self] _ in
@@ -119,7 +131,6 @@ final class ClipboardHistory {
         }
 
         ignoreNextChange = true
-        let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(text, forType: .string)
     }
@@ -131,8 +142,9 @@ final class ClipboardHistory {
 
     // MARK: - Polling
 
-    private func pollTick() {
-        let pasteboard = NSPasteboard.general
+    /// One poll step. Internal (not private) so unit tests can drive the
+    /// watcher deterministically without the timer.
+    func pollTick() {
         let count = pasteboard.changeCount
         guard count != lastSeenChangeCount else { return }
         lastSeenChangeCount = count

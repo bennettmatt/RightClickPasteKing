@@ -21,6 +21,10 @@ enum L10n {
         "menu.clearAfterPaste.tooltip", comment: "Tooltip explaining the clear-after-paste side effect")
     static let menuTintIcon = NSLocalizedString(
         "menu.tintIcon", comment: "Menu: tint the status icon purple while the clipboard has text")
+    static let menuDeselectAfterCopy = NSLocalizedString(
+        "menu.deselectAfterCopy", comment: "Menu: clear the selection after a right-click copy")
+    static let menuDeselectAfterCopyTooltip = NSLocalizedString(
+        "menu.deselectAfterCopy.tooltip", comment: "Tooltip: explains the copy-then-paste one-finger cycle")
     static let menuAccessibilityChecking = NSLocalizedString(
         "menu.accessibility.checking", comment: "Menu: permission status while checking")
     static let menuAccessibilityGranted = NSLocalizedString(
@@ -89,4 +93,26 @@ enum L10n {
         "guide.success.title", comment: "Guide success page title")
     static let guideSuccessBody = NSLocalizedString(
         "guide.success.body", comment: "Guide success page: confirmation plus try-it suggestion")
+
+    // MARK: - Disk image installer
+
+    static let dmgMoveTitle = NSLocalizedString(
+        "dmg.move.title", comment: "Alert title: offer to move the app to /Applications")
+    static let dmgMoveBody = NSLocalizedString(
+        "dmg.move.body", comment: "Alert body: running from the disk image; explains move + eject + trash")
+    static let dmgMoveConfirm = NSLocalizedString(
+        "dmg.move.confirm", comment: "Alert button: confirm move to Applications")
+    static let dmgMoveCancel = NSLocalizedString(
+        "dmg.move.cancel", comment: "Alert button: decline the move for now")
+    /// Format: %@ = underlying error description.
+    static let dmgMoveFailed = NSLocalizedString(
+        "dmg.move.failed", comment: "Alert body: the move to Applications failed; %@ is the error")
+    static let dmgCleanupTitle = NSLocalizedString(
+        "dmg.cleanup.title", comment: "Alert title: offer to eject the leftover disk image")
+    static let dmgCleanupBody = NSLocalizedString(
+        "dmg.cleanup.body", comment: "Alert body: the app's disk image is still mounted; eject and trash?")
+    static let dmgCleanupConfirm = NSLocalizedString(
+        "dmg.cleanup.confirm", comment: "Alert button: eject the image and trash the .dmg")
+    static let dmgCleanupCancel = NSLocalizedString(
+        "dmg.cleanup.cancel", comment: "Alert button: leave the image mounted")
 }
