@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>RightClickPasteKing</title>
+        <item>
+            <title>1.1.1</title>
+            <pubDate>Fri, 12 Jun 2026 22:10:17 -0500</pubDate>
+            <sparkle:version>202606130308</sparkle:version>
+            <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/bennettmatt/RightClickPasteKing/releases/download/v1.1.1/RightClickPasteKing-1.1.1.dmg" length="3753788" type="application/octet-stream" sparkle:edSignature="r9rDlH5TT/89g7psCDaHcQc5NJxTgsi44Z7ywKRJ6v/Se72x0Qtq3NdtxwzA8yNsMPNyN8DqclGrZR+dgfoyCg=="/>
+        </item>
+    </channel>
+</rss>
